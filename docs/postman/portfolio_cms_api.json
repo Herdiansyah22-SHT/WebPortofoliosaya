@@ -1,0 +1,129 @@
+{
+  "info": {
+    "name": "Personal Portfolio CMS API",
+    "description": "REST API Personal Portfolio CMS (Laravel 12).\n\nLangkah pemakaian:\n1. Import collection ini.\n2. Import/buat environment dan set `base_url` (contoh: http://127.0.0.1:8000).\n3. Jalankan request `Login` (Admin/Editor) — token otomatis disimpan ke variabel `token`.\n4. Endpoint admin memakai header `Authorization: Bearer {{token}}` (digunakan otomatis).\n\nAkun seed: admin@example.com / password (role admin), editor@example.com / password (role editor).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000", "type": "string" },
+    { "key": "token", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/v1/auth/login", "host": ["{{base_url}}"], "path": ["api", "v1", "auth", "login"] },
+            "body": { "mode": "raw", "raw": "{ \"email\": \"admin@example.com\", \"password\": \"password\" }", "options": { "raw": { "language": "json" } } }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.success) { pm.collectionVariables.set('token', json.data.token); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        { "name": "Me", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/auth/me", "host": ["{{base_url}}"], "path": ["api", "v1", "auth", "me"] } } },
+        { "name": "Logout", "request": { "method": "POST", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/auth/logout", "host": ["{{base_url}}"], "path": ["api", "v1", "auth", "logout"] } } }
+      ]
+    },
+    {
+      "name": "Public API",
+      "item": [
+        { "name": "Profile", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/api/v1/profile", "host": ["{{base_url}}"], "path": ["api", "v1", "profile"] } } },
+        { "name": "Skills", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/api/v1/skills", "host": ["{{base_url}}"], "path": ["api", "v1", "skills"] } } },
+        { "name": "Experiences", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/api/v1/experiences", "host": ["{{base_url}}"], "path": ["api", "v1", "experiences"] } } },
+        { "name": "Educations", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/api/v1/educations", "host": ["{{base_url}}"], "path": ["api", "v1", "educations"] } } },
+        { "name": "Certificates", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/api/v1/certificates", "host": ["{{base_url}}"], "path": ["api", "v1", "certificates"] } } },
+        { "name": "Projects", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/api/v1/projects?page=1&per_page=9&featured=0", "host": ["{{base_url}}"], "path": ["api", "v1", "projects"], "query": [{ "key": "page", "value": "1" }, { "key": "per_page", "value": "9" }, { "key": "featured", "value": "0" }] } } },
+        { "name": "Project Detail (slug)", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/api/v1/projects/smart-inventory-ai", "host": ["{{base_url}}"], "path": ["api", "v1", "projects", "smart-inventory-ai"] } } },
+        { "name": "Posts", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/api/v1/posts?page=1&per_page=9&category=tutorial&search=", "host": ["{{base_url}}"], "path": ["api", "v1", "posts"], "query": [{ "key": "page", "value": "1" }, { "key": "per_page", "value": "9" }, { "key": "category", "value": "tutorial" }, { "key": "search", "value": "" }] } } },
+        { "name": "Post Detail (slug)", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/api/v1/posts/membangun-rest-api-dengan-laravel", "host": ["{{base_url}}"], "path": ["api", "v1", "posts", "membangun-rest-api-dengan-laravel"] } } },
+        { "name": "Categories", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }], "url": { "raw": "{{base_url}}/api/v1/categories", "host": ["{{base_url}}"], "path": ["api", "v1", "categories"] } } },
+        {
+          "name": "Contact (kirim pesan)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/v1/contact", "host": ["{{base_url}}"], "path": ["api", "v1", "contact"] },
+            "body": { "mode": "raw", "raw": "{ \"name\": \"Nama Visitor\", \"email\": \"visitor@example.com\", \"subject\": \"Kerja sama\", \"message\": \"Halo, saya tertarik bekerja sama.\" }", "options": { "raw": { "language": "json" } } }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin Dashboard",
+      "item": [
+        { "name": "Dashboard Summary", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/dashboard", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "dashboard"] } } }
+      ]
+    },
+    {
+      "name": "Projects (Admin)",
+      "item": [
+        { "name": "List Projects", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/projects?page=1&per_page=20&search=&status=", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "projects"], "query": [{ "key": "page", "value": "1" }, { "key": "per_page", "value": "20" }, { "key": "search", "value": "" }, { "key": "status", "value": "" }] } } },
+        { "name": "Create Project", "request": { "method": "POST", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/projects", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "projects"] }, "body": { "mode": "raw", "raw": "{ \"title\": \"Smart Inventory AI\", \"summary\": \"ERP & Manajemen Inventaris\", \"description\": \"Deskripsi detail.\", \"status\": \"published\", \"is_featured\": true, \"live_url\": \"https://example.com\", \"repo_url\": \"https://github.com/user/repo\", \"technologies\": [\"Laravel\", \"PHP\", \"MySQL\"] }", "options": { "raw": { "language": "json" } } } } },
+        { "name": "Show Project", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/projects/1", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "projects", "1"] } } },
+        { "name": "Update Project", "request": { "method": "PATCH", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/projects/1", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "projects", "1"] }, "body": { "mode": "raw", "raw": "{ \"title\": \"Smart Inventory AI v2\", \"status\": \"published\", \"technologies\": [\"Laravel\", \"PHP\", \"MySQL\"] }", "options": { "raw": { "language": "json" } } } } },
+        { "name": "Delete Project", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/projects/1", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "projects", "1"] } } }
+      ]
+    },
+    {
+      "name": "Blog (Admin)",
+      "item": [
+        { "name": "List Posts", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/posts?page=1&per_page=20", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "posts"], "query": [{ "key": "page", "value": "1" }, { "key": "per_page", "value": "20" }] } } },
+        { "name": "Create Post", "request": { "method": "POST", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/posts", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "posts"] }, "body": { "mode": "raw", "raw": "{ \"title\": \"Membangun REST API dengan Laravel\", \"excerpt\": \"Ringkasan\", \"body\": \"Konten artikel...\", \"category_id\": 1, \"tags\": [\"Laravel\", \"API\"], \"status\": \"published\" }", "options": { "raw": { "language": "json" } } } } },
+        { "name": "Update Post", "request": { "method": "PATCH", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/posts/1", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "posts", "1"] }, "body": { "mode": "raw", "raw": "{ \"title\": \"Membangun REST API dengan Laravel (Update)\", \"status\": \"draft\" }", "options": { "raw": { "language": "json" } } } } },
+        { "name": "Delete Post", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/posts/1", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "posts", "1"] } } },
+        { "name": "List Categories", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/categories", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "categories"] } } },
+        { "name": "List Tags", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/tags", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "tags"] } } }
+      ]
+    },
+    {
+      "name": "Profile / Skills / Experience / Education / Certificates (Admin)",
+      "item": [
+        { "name": "Get Profile", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/profile", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "profile"] } } },
+        { "name": "Update Profile", "request": { "method": "PUT", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/profile", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "profile"] }, "body": { "mode": "raw", "raw": "{ \"name\": \"Achmad Herdiansyah\", \"headline\": \"Junior Web Developer\", \"bio\": \"Bio...\", \"location\": \"Surabaya\", \"email\": \"admin@example.com\", \"is_available\": true, \"social_links\": { \"github\": \"https://github.com\", \"linkedin\": \"https://linkedin.com\" } }", "options": { "raw": { "language": "json" } } } } },
+        { "name": "Create Skill", "request": { "method": "POST", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/skills", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "skills"] }, "body": { "mode": "raw", "raw": "{ \"name\": \"React\", \"category\": \"Frontend\", \"level\": 85, \"is_active\": true }", "options": { "raw": { "language": "json" } } } } },
+        { "name": "List Skills", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/skills", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "skills"] } } },
+        { "name": "Create Experience", "request": { "method": "POST", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/experiences", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "experiences"] }, "body": { "mode": "raw", "raw": "{ \"company\": \"Perusahaan\", \"position\": \"Junior Web Developer\", \"start_date\": \"2024-01-01\", \"is_current\": true, \"is_active\": true }", "options": { "raw": { "language": "json" } } } } },
+        { "name": "Create Education", "request": { "method": "POST", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/educations", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "educations"] }, "body": { "mode": "raw", "raw": "{ \"institution\": \"Universitas 17 Agustus 1945 Surabaya\", \"degree\": \"S1\", \"field_of_study\": \"Teknik Informatika\", \"start_year\": 2022, \"end_year\": 2026 }", "options": { "raw": { "language": "json" } } } } },
+        { "name": "Create Certificate", "request": { "method": "POST", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/certificates", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "certificates"] }, "body": { "mode": "raw", "raw": "{ \"title\": \"Laravel Certificate\", \"issuer\": \"Example\", \"credential_url\": \"https://example.com/verify\" }", "options": { "raw": { "language": "json" } } } } }
+      ]
+    },
+    {
+      "name": "Media (Admin)",
+      "item": [
+        { "name": "List Media", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/media?page=1&per_page=24", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "media"], "query": [{ "key": "page", "value": "1" }, { "key": "per_page", "value": "24" }] } } },
+        { "name": "Upload Media", "request": { "method": "POST", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/media", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "media"] }, "body": { "mode": "formdata", "formdata": [{ "key": "file", "type": "file", "src": ["C:/path/to/image.png"] }, { "key": "collection", "value": "thumbnail", "type": "text" }, { "key": "alt_text", "value": "Deskripsi gambar", "type": "text" }] } } },
+        { "name": "Delete Media", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/media/1", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "media", "1"] } } }
+      ]
+    },
+    {
+      "name": "Messages (Admin)",
+      "item": [
+        { "name": "List Messages", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/messages?page=1&per_page=20", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "messages"], "query": [{ "key": "page", "value": "1" }, { "key": "per_page", "value": "20" }] } } },
+        { "name": "Mark Read / Unread", "request": { "method": "PUT", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/messages/1", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "messages", "1"] }, "body": { "mode": "raw", "raw": "{ \"is_read\": true }", "options": { "raw": { "language": "json" } } } } },
+        { "name": "Delete Message", "request": { "method": "DELETE", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/messages/1", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "messages", "1"] } } }
+      ]
+    },
+    {
+      "name": "SEO & Settings (Admin)",
+      "item": [
+        { "name": "Get SEO", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/seo", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "seo"] } } },
+        { "name": "Update SEO", "request": { "method": "PUT", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/seo", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "seo"] }, "body": { "mode": "raw", "raw": "{ \"seo\": { \"default_title\": \"Achmad Herdiansyah - Junior Web Developer\", \"default_description\": \"Portfolio pribadi.\", \"default_og_type\": \"website\", \"default_og_image\": \"\", \"robots_txt\": \"User-agent: *\\nAllow: /\\n\" } }", "options": { "raw": { "language": "json" } } } } },
+        { "name": "Get Settings", "request": { "method": "GET", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/settings", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "settings"] } } },
+        { "name": "Update Settings", "request": { "method": "PUT", "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{base_url}}/api/v1/admin/settings", "host": ["{{base_url}}"], "path": ["api", "v1", "admin", "settings"] }, "body": { "mode": "raw", "raw": "{ \"site\": { \"name\": \"Achmad Herdiansyah\", \"tagline\": \"Junior Web Developer\", \"description\": \"Portfolio pribadi.\", \"social_links\": { \"github\": \"https://github.com\", \"linkedin\": \"https://linkedin.com\" } } }", "options": { "raw": { "language": "json" } } } } }
+      ]
+    }
+  ]
+}

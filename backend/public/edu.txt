@@ -1,0 +1,2 @@
+ID:1 START:2022 END:2026 INST:Universitas 17 Agustus 1945 Surabaya DEG:S1 FOS:Teknik Informatika DESC:Fokus pada pengembangan web. IPK 3.42 / 4.00.
+ID:2 START:2019 END:2021 INST:SMK Antartika 2 Sidoarjo DEG:SMK FOS:Multimedia DESC:Latar belakang desain dan multimedia.
